@@ -5,6 +5,15 @@ const alwaysCopyKeys = [
 ];
 
 const EX = function errorDetailsWithoutLogSpam(origErr) {
+  const t = origErr && typeof origErr;
+
+  if (t !== 'object') {
+    const msg = ('Unsupported non-object error given to ' + EX.name + ': '
+      + (String(t) || 'empty string') + ' '
+      + (JSON.stringify(origErr) || String(origErr)));
+    return new TypeError(msg);
+  }
+
   const err = Object.create(origErr);
   function copyKey(k) {
     const v = origErr[k];
